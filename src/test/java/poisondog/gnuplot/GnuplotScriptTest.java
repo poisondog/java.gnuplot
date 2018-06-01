@@ -79,4 +79,18 @@ public class GnuplotScriptTest {
 		Assert.assertEquals("reset\nset style data lines\n", mScript.toString());
 	}
 
+	@Test
+	public void testTimeFormat() throws Exception {
+		mScript.setTimeFormat("'%Y-%m-%d %H:%M:%S'");
+		Assert.assertEquals("set timefmt '%Y-%m-%d %H:%M:%S'\n", mScript.getTimeFormat());
+		Assert.assertEquals("reset\nset timefmt '%Y-%m-%d %H:%M:%S'\n", mScript.toString());
+	}
+
+	@Test
+	public void testXRange() throws Exception {
+		mScript.setXRange("['2013-07-22 15:50':'2013-07-22 16:00']");
+		Assert.assertEquals("set xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.getXRange());
+		Assert.assertEquals("reset\nset xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.toString());
+	}
+
 }

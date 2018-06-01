@@ -61,6 +61,14 @@ public class GnuplotScript {
 		mContent.put("style", style);
 	}
 
+	public void setTimeFormat(String format) {
+		mContent.put("timefmt", format);
+	}
+
+	public void setXRange(String range) {
+		mContent.put("xrange", range);
+	}
+
 	public String getTitle() {
 		return createSetString("title");
 	}
@@ -83,6 +91,14 @@ public class GnuplotScript {
 
 	public String getStyle() {
 		return createSetString("style");
+	}
+
+	public String getTimeFormat() {
+		return createSetString("timefmt");
+	}
+
+	public String getXRange() {
+		return createSetString("xrange");
 	}
 
 	private String createSetString(String key) {
