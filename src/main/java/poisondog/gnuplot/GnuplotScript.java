@@ -45,8 +45,16 @@ public class GnuplotScript {
 		mContent.put("xlabel", "'" + label + "'");
 	}
 
+	public void setXData(String data) {
+		mContent.put("xdata", data);
+	}
+
 	public void setYLabel(String label) {
 		mContent.put("ylabel", "'" + label + "'");
+	}
+
+	public void setTerminal(String terminal) {
+		mContent.put("terminal", terminal);
 	}
 
 	public String getTitle() {
@@ -57,8 +65,16 @@ public class GnuplotScript {
 		return createSetString("xlabel");
 	}
 
+	public String getXData() {
+		return createSetString("xdata");
+	}
+
 	public String getYLabel() {
 		return createSetString("ylabel");
+	}
+
+	public String getTerminal() {
+		return createSetString("terminal");
 	}
 
 	private String createSetString(String key) {

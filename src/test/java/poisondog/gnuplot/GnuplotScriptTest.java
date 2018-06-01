@@ -46,6 +46,13 @@ public class GnuplotScriptTest {
 	}
 
 	@Test
+	public void testXData() throws Exception {
+		mScript.setXData("time");
+		Assert.assertEquals("set xdata time\n", mScript.getXData());
+		Assert.assertEquals("reset\nset xdata time\n", mScript.toString());
+	}
+
+	@Test
 	public void testYLabel() throws Exception {
 		mScript.setYLabel("y axis");
 		Assert.assertEquals("set ylabel 'y axis'\n", mScript.getYLabel());
@@ -57,4 +64,12 @@ public class GnuplotScriptTest {
 		mScript.set("output", "'runtime.png'");
 		Assert.assertEquals("reset\nset output 'runtime.png'\n", mScript.toString());
 	}
+
+	@Test
+	public void testTerminal() throws Exception {
+		mScript.setTerminal("png");
+		Assert.assertEquals("set terminal png\n", mScript.getTerminal());
+		Assert.assertEquals("reset\nset terminal png\n", mScript.toString());
+	}
+
 }
