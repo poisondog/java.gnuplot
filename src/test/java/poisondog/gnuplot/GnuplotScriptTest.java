@@ -72,4 +72,11 @@ public class GnuplotScriptTest {
 		Assert.assertEquals("reset\nset terminal png\n", mScript.toString());
 	}
 
+	@Test
+	public void testStyle() throws Exception {
+		mScript.setStyle("data lines");
+		Assert.assertEquals("set style data lines\n", mScript.getStyle());
+		Assert.assertEquals("reset\nset style data lines\n", mScript.toString());
+	}
+
 }

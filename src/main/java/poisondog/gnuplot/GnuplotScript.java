@@ -57,6 +57,10 @@ public class GnuplotScript {
 		mContent.put("terminal", terminal);
 	}
 
+	public void setStyle(String style) {
+		mContent.put("style", style);
+	}
+
 	public String getTitle() {
 		return createSetString("title");
 	}
@@ -75,6 +79,10 @@ public class GnuplotScript {
 
 	public String getTerminal() {
 		return createSetString("terminal");
+	}
+
+	public String getStyle() {
+		return createSetString("style");
 	}
 
 	private String createSetString(String key) {
