@@ -15,45 +15,71 @@
  */
 package poisondog.gnuplot;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 /**
  * @author Adam Huang
  * @since 2018-06-01
  */
 public class GnuplotScript {
-	private String mTitle;
-	private String mXLabel;
-	private String mYLabel;
+	private Map<String, String> mContent;
+
+	/**
+	 * Constructor
+	 */
+	public GnuplotScript() {
+		mContent = new HashMap<String, String>();
+	}
+
+	public void set(String key, String value) {
+		mContent.put(key, value);
+	}
 
 	public void setTitle(String title) {
-		mTitle = title;
+		mContent.put("title", "'" + title + "'");
 	}
 
 	public void setXLabel(String label) {
-		mXLabel = label;
+		mContent.put("xlabel", "'" + label + "'");
 	}
 
 	public void setYLabel(String label) {
-		mYLabel = label;
+		mContent.put("ylabel", "'" + label + "'");
+	}
+
+	public String getTitle() {
+		return createSetString("title");
+	}
+
+	public String getXLabel() {
+		return createSetString("xlabel");
+	}
+
+	public String getYLabel() {
+		return createSetString("ylabel");
+	}
+
+	private String createSetString(String key) {
+		String value = mContent.get(key);
+		if (value == null || value.isEmpty())
+			return "";
+		StringBuilder builder = new StringBuilder();
+		builder.append("set ");
+		builder.append(key);
+		builder.append(" ");
+		builder.append(value);
+		builder.append("\n");
+		return builder.toString();
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("reset\n");
-		if (mTitle != null && !mTitle.isEmpty()) {
-			builder.append("set title '");
-			builder.append(mTitle);
-			builder.append("'");
-		}
-		if (mXLabel != null && !mXLabel.isEmpty()) {
-			builder.append("set xlabel '");
-			builder.append(mXLabel);
-			builder.append("'");
-		}
-		if (mYLabel != null && !mYLabel.isEmpty()) {
-			builder.append("set ylabel '");
-			builder.append(mYLabel);
-			builder.append("'");
+		for (String key : mContent.keySet()) {
+			builder.append(createSetString(key));
 		}
 		return builder.toString();
 	}

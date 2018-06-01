@@ -34,18 +34,27 @@ public class GnuplotScriptTest {
 	@Test
 	public void testTitle() throws Exception {
 		mScript.setTitle("MyPlot");
-		Assert.assertEquals("reset\nset title 'MyPlot'", mScript.toString());
+		Assert.assertEquals("set title 'MyPlot'\n", mScript.getTitle());
+		Assert.assertEquals("reset\nset title 'MyPlot'\n", mScript.toString());
 	}
 
 	@Test
 	public void testXLabel() throws Exception {
 		mScript.setXLabel("x axis");
-		Assert.assertEquals("reset\nset xlabel 'x axis'", mScript.toString());
+		Assert.assertEquals("set xlabel 'x axis'\n", mScript.getXLabel());
+		Assert.assertEquals("reset\nset xlabel 'x axis'\n", mScript.toString());
 	}
 
 	@Test
 	public void testYLabel() throws Exception {
 		mScript.setYLabel("y axis");
-		Assert.assertEquals("reset\nset ylabel 'y axis'", mScript.toString());
+		Assert.assertEquals("set ylabel 'y axis'\n", mScript.getYLabel());
+		Assert.assertEquals("reset\nset ylabel 'y axis'\n", mScript.toString());
+	}
+
+	@Test
+	public void testSet() throws Exception {
+		mScript.set("output", "'runtime.png'");
+		Assert.assertEquals("reset\nset output 'runtime.png'\n", mScript.toString());
 	}
 }
