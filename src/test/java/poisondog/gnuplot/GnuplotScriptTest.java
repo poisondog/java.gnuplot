@@ -93,4 +93,18 @@ public class GnuplotScriptTest {
 		Assert.assertEquals("reset\nset xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.toString());
 	}
 
+	@Test
+	public void testDataFile() throws Exception {
+		mScript.setDataFile("separator \",\"");
+		Assert.assertEquals("set datafile separator \",\"\n", mScript.getDataFile());
+		Assert.assertEquals("reset\nset datafile separator \",\"\n", mScript.toString());
+	}
+
+	@Test
+	public void testOutput() throws Exception {
+		mScript.setOutput("'datausage.jpg'");
+		Assert.assertEquals("set output 'datausage.jpg'\n", mScript.getOutput());
+		Assert.assertEquals("reset\nset output 'datausage.jpg'\n", mScript.toString());
+	}
+
 }

@@ -33,6 +33,22 @@ public class GnuplotScript {
 		mContent = new HashMap<String, String>();
 	}
 
+	public static GnuplotScript time() {
+		GnuplotScript script = new GnuplotScript();
+		script.setTerminal("jpeg");
+		script.setXData("time");
+		script.setStyle("data lines");
+		script.setTimeFormat("'%Y-%m-%d %H:%M:%S'");
+		script.set("format", "x \"%m-%d\n%H:%M\"");
+		script.setXLabel("Time");
+		script.setYLabel("Y");
+		script.set("autoscale", "y");
+		script.setXRange("['2013-07-22 15:50':'2013-07-22 16:00']");
+		script.setOutput("gnuplot.jpg");
+		script.setDataFile("separator \",\"");
+		return script;
+	}
+
 	public void set(String key, String value) {
 		mContent.put(key, value);
 	}
@@ -69,6 +85,14 @@ public class GnuplotScript {
 		mContent.put("xrange", range);
 	}
 
+	public void setDataFile(String data) {
+		mContent.put("datafile", data);
+	}
+
+	public void setOutput(String output) {
+		mContent.put("output", output);
+	}
+
 	public String getTitle() {
 		return createSetString("title");
 	}
@@ -99,6 +123,14 @@ public class GnuplotScript {
 
 	public String getXRange() {
 		return createSetString("xrange");
+	}
+
+	public String getDataFile() {
+		return createSetString("datafile");
+	}
+
+	public String getOutput() {
+		return createSetString("output");
 	}
 
 	private String createSetString(String key) {
