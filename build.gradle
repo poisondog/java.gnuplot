@@ -24,8 +24,8 @@ repositories {
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'java'
-apply plugin: 'application'
-mainClassName = 'poisondog.gnuplot.Demo'
+//apply plugin: 'application'
+//mainClassName = 'poisondog.gnuplot.Demo'
 
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
@@ -52,7 +52,7 @@ bintray {
 		repo = 'poisondog'
 		name = project.name
 		licenses = ['Apache-2.0']
-		vcsUrl = 'https://github.com/poisondog/poisondog.core.git'
+		vcsUrl = 'https://github.com/poisondog/java.gnuplot.git'
 	}
 }
 
