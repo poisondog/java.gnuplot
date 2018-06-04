@@ -3,11 +3,11 @@ unset multiplot
 set terminal jpeg
 set xdata time
 set style data lines
-set timefmt '%Y-%m-%d %H:%M:%S'
+set timefmt '%Y-%m-%dT%H:%M:%S'
 set format x "%m-%d\n%H:%M"
 set key autotitle columnheader
 set autoscale y
-set xrange ['2013-07-22 15:50':'2013-07-22 16:00']
+set xrange ['2013-07-22T15:50':'2013-07-22T16:00']
 set output "datausage.jpg"
 set datafile separator ","
 plot \

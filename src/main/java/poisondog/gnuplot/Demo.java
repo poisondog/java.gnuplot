@@ -13,6 +13,10 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import poisondog.gnuplot.GnuplotScript;
 import poisondog.io.GetResourceUrl;
+import java.io.File;
+import java.io.FileInputStream;
+import poisondog.vfs.IData;
+import poisondog.vfs.FileFactory;
 
 public class Demo extends ApplicationFrame {
 
@@ -67,16 +71,18 @@ public class Demo extends ApplicationFrame {
 //		RefineryUtilities.centerFrameOnScreen(demo);
 //		demo.setVisible(true);
 
-//		GetResourceUrl task = new GetResourceUrl();
-//		String path = task.execute("data.txt");
-		String data = "Time,IN,out\n2013-07-22T15:59:00.231+08:00,6286,3730\n2013-07-22T15:58:00.987+08:00,10695,14589";
-		InputStream is = new ByteArrayInputStream(data.getBytes());
+		try {
+		GetResourceUrl task = new GetResourceUrl();
+		String path = task.execute("data.txt");
+		System.out.println(path);
+		InputStream is = ((IData)FileFactory.getFile(path)).getInputStream();
+//		String data = "Time,IN,out\n2013-07-22T15:59:00.231+08:00,6286,3730\n2013-07-22T15:58:00.987+08:00,10695,14589";
+//		InputStream is = new ByteArrayInputStream(data.getBytes());
 
 		GnuplotScript script = GnuplotScript.time();
-		script.setXRange("2013-07-22T12:50:00", "2013-07-22T16:00:00");
+		script.setXRange("2013-07-22T15:50:00", "2013-07-22T16:00:00");
 		script.setTerminal("jpeg");
 		script.setOutput("gnuplot.jpg");
-		try {
 			script.execute(is).waitFor();
 		} catch(Exception e) {
 			e.printStackTrace();
