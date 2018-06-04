@@ -18,6 +18,8 @@ package poisondog.gnuplot;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import poisondog.io.GetResourceUrl;
 
 /**
  * @author Adam Huang
@@ -29,6 +31,14 @@ public class GnuplotScriptTest {
 	@Before
 	public void setUp() throws Exception {
 		mScript = new GnuplotScript();
+	}
+
+	@Test
+	public void testExecute() throws Exception {
+		mScript = GnuplotScript.time();
+		GetResourceUrl task = new GetResourceUrl();
+		String path = task.execute("data.txt");
+		mScript.execute(path);
 	}
 
 	@Test
@@ -88,7 +98,7 @@ public class GnuplotScriptTest {
 
 	@Test
 	public void testXRange() throws Exception {
-		mScript.setXRange("['2013-07-22 15:50':'2013-07-22 16:00']");
+		mScript.setXRange("'2013-07-22 15:50'", "'2013-07-22 16:00'");
 		Assert.assertEquals("set xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.getXRange());
 		Assert.assertEquals("reset\nset xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.toString());
 	}

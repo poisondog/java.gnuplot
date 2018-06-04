@@ -15,15 +15,21 @@
  */
 package poisondog.gnuplot;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
+import poisondog.core.Mission;
+import poisondog.string.GetPath;
+import java.io.File;
+import java.io.FileInputStream;
+import org.apache.commons.io.IOUtils;
+import java.io.FileOutputStream;
 
 /**
  * @author Adam Huang
  * @since 2018-06-01
  */
-public class GnuplotScript {
+public class GnuplotScript implements Mission<String> {
 	private Map<String, String> mContent;
 
 	/**
@@ -42,11 +48,34 @@ public class GnuplotScript {
 		script.set("format", "x \"%m-%d\n%H:%M\"");
 		script.setXLabel("Time");
 		script.setYLabel("Y");
+		script.set("key autotitle", "columnheader");
 		script.set("autoscale", "y");
-		script.setXRange("['2013-07-22 15:50':'2013-07-22 16:00']");
+		script.setXRange("'2013-07-22 15:50'", "'2013-07-22 16:00'");
 		script.setOutput("gnuplot.jpg");
 		script.setDataFile("separator \",\"");
 		return script;
+	}
+
+	@Override
+	public String execute(String data) throws IOException {
+		File temp = File.createTempFile("script", ".tmp");
+		IOUtils.write(toString(), new FileOutputStream(temp), "utf8");
+		String path = temp.getAbsolutePath();
+		Runtime rt = Runtime.getRuntime();
+		GetPath task = new GetPath();
+		System.out.println("run gnuplot " + path);
+		Process pr = rt.exec("gnuplot " + path);
+		return null;
+	}
+
+	private String createUsing(String filename) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("'");
+		builder.append(filename);
+		builder.append("' using ");
+		builder.append("1:");
+		builder.append(" with lines");
+		return builder.toString();
 	}
 
 	public void set(String key, String value) {
@@ -81,8 +110,14 @@ public class GnuplotScript {
 		mContent.put("timefmt", format);
 	}
 
-	public void setXRange(String range) {
-		mContent.put("xrange", range);
+	public void setXRange(String start, String end) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("[");
+		builder.append(start);
+		builder.append(":");
+		builder.append(end);
+		builder.append("]");
+		mContent.put("xrange", builder.toString());
 	}
 
 	public void setDataFile(String data) {

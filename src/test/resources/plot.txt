@@ -5,10 +5,11 @@ set xdata time
 set style data lines
 set timefmt '%Y-%m-%d %H:%M:%S'
 set format x "%m-%d\n%H:%M"
-set xlabel "Time"
-set ylabel "Traffic"
+set key autotitle columnheader
 set autoscale y
 set xrange ['2013-07-22 15:50':'2013-07-22 16:00']
 set output "datausage.jpg"
 set datafile separator ","
-plot 'data.txt' using 1:2 t "inbound" w lines, "data.txt" using 1:3 t "outbound" w lines
+plot \
+'data.txt' using 1:2 with lines, \
+"data.txt" using 1:3 with lines title "outbound"

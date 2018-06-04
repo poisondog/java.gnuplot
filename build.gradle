@@ -58,7 +58,8 @@ bintray {
 
 dependencies {
 //	compile 'org.slf4j:slf4j-api:1.7.7'
-	compile group: 'jfree', name: 'jfreechart', version: '1.0.12'
+	compile 'jfree:jfreechart:1.0.12'
+	compile 'poisondog:poisondog.commons:3.6.4'
 	testCompile "junit:junit:4.11"
 	testCompile "org.mockito:mockito-all:1.9.5"
 }
