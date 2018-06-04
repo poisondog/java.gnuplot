@@ -15,10 +15,11 @@
  */
 package poisondog.gnuplot;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import java.io.ByteArrayInputStream;
 import poisondog.io.GetResourceUrl;
 
 /**
@@ -35,10 +36,11 @@ public class GnuplotScriptTest {
 
 	@Test
 	public void testExecute() throws Exception {
+		String data = "Time,IN,out\n 2013-07-22 15:59:00,6286,3730\n 2013-07-22 15:58:00,10695,14589";
+		InputStream is = new ByteArrayInputStream(data.getBytes());
 		mScript = GnuplotScript.time();
-		GetResourceUrl task = new GetResourceUrl();
-		String path = task.execute("data.txt");
-		mScript.execute(path);
+		mScript.setTerminal("jpeg");
+		Assert.assertNotNull(mScript.execute(is));
 	}
 
 	@Test
@@ -91,14 +93,14 @@ public class GnuplotScriptTest {
 
 	@Test
 	public void testTimeFormat() throws Exception {
-		mScript.setTimeFormat("'%Y-%m-%d %H:%M:%S'");
+		mScript.setTimeFormat("%Y-%m-%d %H:%M:%S");
 		Assert.assertEquals("set timefmt '%Y-%m-%d %H:%M:%S'\n", mScript.getTimeFormat());
 		Assert.assertEquals("reset\nset timefmt '%Y-%m-%d %H:%M:%S'\n", mScript.toString());
 	}
 
 	@Test
 	public void testXRange() throws Exception {
-		mScript.setXRange("'2013-07-22 15:50'", "'2013-07-22 16:00'");
+		mScript.setXRange("2013-07-22 15:50", "2013-07-22 16:00");
 		Assert.assertEquals("set xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.getXRange());
 		Assert.assertEquals("reset\nset xrange ['2013-07-22 15:50':'2013-07-22 16:00']\n", mScript.toString());
 	}
@@ -112,7 +114,7 @@ public class GnuplotScriptTest {
 
 	@Test
 	public void testOutput() throws Exception {
-		mScript.setOutput("'datausage.jpg'");
+		mScript.setOutput("datausage.jpg");
 		Assert.assertEquals("set output 'datausage.jpg'\n", mScript.getOutput());
 		Assert.assertEquals("reset\nset output 'datausage.jpg'\n", mScript.toString());
 	}
