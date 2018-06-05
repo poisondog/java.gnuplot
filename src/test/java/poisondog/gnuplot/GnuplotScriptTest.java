@@ -119,4 +119,13 @@ public class GnuplotScriptTest {
 		Assert.assertEquals("reset\nset output 'datausage.jpg'\n", mScript.toString());
 	}
 
+	@Test
+	public void testLine() throws Exception {
+		mScript.setFilename("data.txt");
+		mScript.addLine(3);
+		Assert.assertEquals("reset\nplot 'data.txt' using 1:3 with lines,", mScript.toString());
+		mScript.addLine(2);
+		Assert.assertEquals("reset\nplot 'data.txt' using 1:3 with lines,'data.txt' using 1:2 with lines,", mScript.toString());
+	}
+
 }

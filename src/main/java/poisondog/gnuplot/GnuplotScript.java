@@ -26,6 +26,8 @@ import org.apache.commons.io.IOUtils;
 import poisondog.core.Mission;
 import poisondog.io.CopyTask;
 import poisondog.io.ReadLine;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author Adam Huang
@@ -34,7 +36,8 @@ import poisondog.io.ReadLine;
 public class GnuplotScript implements Mission<InputStream> {
 	private Map<String, String> mContent1;
 	private Map<String, String> mContent2;
-	private String mPlot;
+	private List<String> mPlots;
+	private String mFilename;
 
 	/**
 	 * Constructor
@@ -42,6 +45,7 @@ public class GnuplotScript implements Mission<InputStream> {
 	public GnuplotScript() {
 		mContent1 = new HashMap<String, String>();
 		mContent2 = new HashMap<String, String>();
+		mPlots = new ArrayList<String>();
 	}
 
 	public static GnuplotScript time() {
@@ -62,16 +66,13 @@ public class GnuplotScript implements Mission<InputStream> {
 		CopyTask copy = new CopyTask(input, new FileOutputStream(tempData));
 		copy.transport();
 
+		setFilename(tempData.getAbsolutePath());
 		ReadLine reader = new ReadLine();
 		String line = reader.execute(new FileInputStream(tempData));
 		String[] column = line.split(",");
-		StringBuilder builder = new StringBuilder();
 		for (int i = 1; i < column.length; i++) {
-			builder.append(createUsing(tempData.getAbsolutePath(), i + 1));
-			if (i != column.length - 1)
-				builder.append(", ");
+			addLine(i + 1);
 		}
-		setPlot(builder.toString());
 
 		File tempScript = File.createTempFile("script", ".txt");
 		IOUtils.write(toString(), new FileOutputStream(tempScript), "utf8");
@@ -80,19 +81,45 @@ public class GnuplotScript implements Mission<InputStream> {
 		return pr;
 	}
 
-	public void setPlot(String using) {
-		mPlot = using;
-	}
-
-	private String createUsing(String filename, int index) {
+	public void addLine(int index) {
 		StringBuilder builder = new StringBuilder();
-		builder.append("'");
-		builder.append(filename);
-		builder.append("' using ");
+		builder.append("using ");
 		builder.append("1:");
 		builder.append(index);
 		builder.append(" with lines");
-		return builder.toString();
+		addPlot(builder.toString());
+	}
+
+	public void addFilledcurve(int current, int another) {
+		addFilledcurve(current, another, "", "");
+	}
+
+	public void addFilledcurve(int current, int another, String title) {
+		addFilledcurve(current, another, "", title);
+	}
+
+	public void addFilledcurve(int current, int another, String condition, String title) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("using ");
+		builder.append("1:");
+		builder.append(current);
+		builder.append(":");
+		builder.append(another);
+		builder.append(" with filledcurves ");
+		builder.append(condition);
+		if (!title.isEmpty()) {
+			builder.append(" title '");
+			builder.append(title);
+			builder.append("'");
+		}
+		addPlot(builder.toString());
+	}
+
+	/**
+	 * @param line the line is command starts with "using ... ". ex: "using 1:2:3 with filledcurves above title 'foo'"
+	 */
+	public void addPlot(String line) {
+		mPlots.add(line);
 	}
 
 	public void set(String key, String value) {
@@ -143,6 +170,10 @@ public class GnuplotScript implements Mission<InputStream> {
 
 	public void setOutput(String output) {
 		mContent1.put("output", "'" + output + "'");
+	}
+
+	public void setFilename(String filename) {
+		mFilename = filename;
 	}
 
 	public String getTitle() {
@@ -208,9 +239,14 @@ public class GnuplotScript implements Mission<InputStream> {
 		for (String key : mContent2.keySet()) {
 			builder.append(createSetString(mContent2, key));
 		}
-		if (mPlot != null) {
+		if (!mPlots.isEmpty())
 			builder.append("plot ");
-			builder.append(mPlot);
+		for (String line : mPlots) {
+			builder.append("'");
+			builder.append(mFilename);
+			builder.append("' ");
+			builder.append(line);
+			builder.append(",");
 		}
 		return builder.toString();
 	}
